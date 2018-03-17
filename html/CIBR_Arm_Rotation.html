@@ -1,0 +1,209 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>CIBR_Arm_Rotation</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-03-09"><meta name="DC.source" content="CIBR_Arm_Rotation.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Figuring Out Rotation Matrix for 3 Link Stroke Rehab Arm</a></li><li><a href="#2">Questions 1 and 2: DH Parameters Table</a></li><li><a href="#3">Question 4: Calculate the Overall Transformation Matrix</a></li><li><a href="#4">Question 7: Plot Arm in 3D</a></li></ul></div><h2 id="1">Figuring Out Rotation Matrix for 3 Link Stroke Rehab Arm</h2><p>Prepared and submitted by Alexandra Valiton Spring 2018</p><pre class="codeinput">clear <span class="string">all</span>; close <span class="string">all</span>; clc;
+</pre><h2 id="2">Questions 1 and 2: DH Parameters Table</h2><p>See Figure 1 for axis labels at each joint. See Table 1 for the DH Parameters, based on the axis labels in figure 1.</p><p><img vspace="5" hspace="5" src="Fig1.jpeg" alt=""> </p><p><img vspace="5" hspace="5" src="Table1.jpeg" alt=""> </p><p>In this section, each DH parameter will be declared as an [n x 1] vector, where each element index corresponds to the joint index. Since some of the DH parameters are static (e.g. link lengths) and others are variable (e.g. joint states), there is a vector of joint variables <img src="CIBR_Arm_Rotation_eq15226540192103580117.png" alt="$q$"> whose elements will be used in the Parameter Vectors</p><pre class="codeinput">syms <span class="string">q0</span> <span class="string">q1</span> <span class="string">q2</span> <span class="string">'real'</span>; <span class="comment">% Joint states, in degrees</span>
+syms <span class="string">l0</span> <span class="string">l1</span> <span class="string">l2</span> <span class="string">l3</span> <span class="string">'real'</span>; <span class="comment">% Joint lengths, in cm</span>
+
+q = [q0, q1, q2];
+l = [l0, l1, l2, l3];
+
+DH_theta = [0, deg2rad(90), q(1), q(2), q(3)+ deg2rad(90)]'; <span class="comment">% Theta angles</span>
+DH_d = [l(1), 0, l(2), 0, 0]'; <span class="comment">% Displacements d in mm</span>
+DH_a = [0, 0, 0, l(3), l(4)]'; <span class="comment">% Displacements a in mm</span>
+DH_alpha = [deg2rad(-45), 0, deg2rad(-90), 0, 0]'; <span class="comment">% rotations alpha</span>
+</pre><h2 id="3">Question 4: Calculate the Overall Transformation Matrix</h2><p>The frame-by frame transformation matrices can be multiplied together to create the transformation matrix <img src="CIBR_Arm_Rotation_eq09616796243657053440.png" alt="$T_6^0$">, representing the transformation between the base frame <img src="CIBR_Arm_Rotation_eq05581510236333683931.png" alt="$F_0$"> and the tip frame <img src="CIBR_Arm_Rotation_eq02826645769600493520.png" alt="$F_6$">. The transformation is first given purely symbolically, then with 0's inserted where they occur in the model (see Table 1).</p><pre class="codeinput">T = eye(4); <span class="comment">% start with an Identity matrix seed to multiply subsequent transformations by</span>
+<span class="keyword">for</span> i=1:length(DH_d)
+    T_local = dhparam2matrix(DH_theta(i), DH_d(i), DH_a(i), DH_alpha(i));
+    T = T * T_local;
+<span class="keyword">end</span>
+disp(<span class="string">"The total transformation can be represented by:"</span>);
+disp(vpa(T));
+</pre><pre class="codeoutput">The total transformation can be represented by:
+[                                                                                                                                               - 1.0*sin(q2 + 1.5707963267948966192313216916398)*(0.00000000000000006123233995736766035868820147292*cos(q0)*cos(q1) - 1.0*sin(q0)*sin(q1)) - 1.0*cos(q2 + 1.5707963267948966192313216916398)*(0.00000000000000006123233995736766035868820147292*cos(q0)*sin(q1) + cos(q1)*sin(q0)),                                                                                                                                                   sin(q2 + 1.5707963267948966192313216916398)*(0.00000000000000006123233995736766035868820147292*cos(q0)*sin(q1) + cos(q1)*sin(q0)) - 1.0*cos(q2 + 1.5707963267948966192313216916398)*(0.00000000000000006123233995736766035868820147292*cos(q0)*cos(q1) - 1.0*sin(q0)*sin(q1)),                                                                                   -1.0*cos(q0),                                                                                                                                                                                                                                                                      - 1.0*l3*cos(q2 + 1.5707963267948966192313216916398)*(0.00000000000000006123233995736766035868820147292*cos(q0)*sin(q1) + cos(q1)*sin(q0)) - 0.00000000000000006123233995736766035868820147292*l2*cos(q0)*sin(q1) - 1.0*l2*cos(q1)*sin(q0) - 1.0*l3*sin(q2 + 1.5707963267948966192313216916398)*(0.00000000000000006123233995736766035868820147292*cos(q0)*cos(q1) - 1.0*sin(q0)*sin(q1))]
+[ 1.0*cos(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*cos(q1) - sin(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) + 0.70710678118654752440084436210485)) - 1.0*sin(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*sin(q1) + cos(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) + 0.70710678118654752440084436210485)), - 1.0*cos(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*sin(q1) + cos(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) + 0.70710678118654752440084436210485)) - sin(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*cos(q1) - sin(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) + 0.70710678118654752440084436210485)), 0.00000000000000004329780281177466498205116037418 - 0.70710678118654752440084436210485*sin(q0),      0.70710678118654752440084436210485*l1 - 1.0*l2*sin(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) + 0.70710678118654752440084436210485) + 0.70710678118654752440084436210485*l2*cos(q0)*cos(q1) + 1.0*l3*cos(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*cos(q1) - sin(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) + 0.70710678118654752440084436210485)) - 1.0*l3*sin(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*sin(q1) + cos(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) + 0.70710678118654752440084436210485))]
+[ 1.0*sin(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*sin(q1) + cos(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) - 0.70710678118654752440084436210485)) - 1.0*cos(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*cos(q1) - sin(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) - 0.70710678118654752440084436210485)),   1.0*cos(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*sin(q1) + cos(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) - 0.70710678118654752440084436210485)) + sin(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*cos(q1) - sin(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) - 0.70710678118654752440084436210485)), 0.70710678118654752440084436210485*sin(q0) + 0.00000000000000004329780281177466498205116037418, l0 + 0.70710678118654752440084436210485*l1 + 1.0*l2*sin(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) - 0.70710678118654752440084436210485) - 0.70710678118654752440084436210485*l2*cos(q0)*cos(q1) - 1.0*l3*cos(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*cos(q1) - sin(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) - 0.70710678118654752440084436210485)) + 1.0*l3*sin(q2 + 1.5707963267948966192313216916398)*(0.70710678118654752440084436210485*cos(q0)*sin(q1) + cos(q1)*(0.00000000000000004329780281177466498205116037418*sin(q0) - 0.70710678118654752440084436210485))]
+[                                                                                                                                                                                                                                                                                                                                                                                                                                 0,                                                                                                                                                                                                                                                                                                                                                                                                                               0,                                                                                              0,                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            1.0]
+ 
+</pre><h2 id="4">Question 7: Plot Arm in 3D</h2><p>Given the 6 joint angles, plot a stick figure of the robot.</p><pre class="codeinput">var1 = {l0, l1, l2, l3};
+var2 = {0.07, 0.15, 0.21, 0.16};
+DH_d = subs(DH_d, var1, var2);
+DH_a = subs(DH_a, var1, var2);
+T = subs(T, var1, var2);
+
+var1 = {q0, q1, q2};
+var2 = {0,0,0};<span class="comment">%{0.44, -0.84, 1.64-pi/2};</span>
+DH_theta = eval(subs(DH_theta, var1, var2));
+DH_alpha = eval(subs(DH_alpha, var1, var2));
+
+plotarm_3DOF(DH_theta, DH_d, DH_alpha, DH_a);
+
+FK = T(1:3,4);
+R = eval(subs(T(1:3,1:3), var1, var2));
+
+J = jacobian(FK, [q0,q1,q2]');
+J = vpa(J,3)
+
+J = eval(subs(J, var1, var2));
+F_tip = [3.3;0;0];
+tau = transpose(J)*(F_tip)
+</pre><pre class="codeoutput"> 
+J =
+ 
+[                1.29e-17*sin(q0)*sin(q1) - 0.21*cos(q0)*cos(q1) - 0.16*cos(q2 + 1.57)*(cos(q0)*cos(q1) - 6.12e-17*sin(q0)*sin(q1)) + 0.16*sin(q2 + 1.57)*(cos(q0)*sin(q1) + 6.12e-17*cos(q1)*sin(q0)),                                               0.21*sin(q0)*sin(q1) - 0.16*cos(q2 + 1.57)*(6.12e-17*cos(q0)*cos(q1) - 1.0*sin(q0)*sin(q1)) - 1.29e-17*cos(q0)*cos(q1) + 0.16*sin(q2 + 1.57)*(6.12e-17*cos(q0)*sin(q1) + cos(q1)*sin(q0)),                               0.16*sin(q2 + 1.57)*(6.12e-17*cos(q0)*sin(q1) + cos(q1)*sin(q0)) - 0.16*cos(q2 + 1.57)*(6.12e-17*cos(q0)*cos(q1) - 1.0*sin(q0)*sin(q1))]
+[ - 9.09e-18*cos(q0)*sin(q1) - 0.148*cos(q1)*sin(q0) - 0.16*cos(q2 + 1.57)*(4.33e-17*cos(q0)*sin(q1) + 0.707*cos(q1)*sin(q0)) - 0.16*sin(q2 + 1.57)*(4.33e-17*cos(q0)*cos(q1) - 0.707*sin(q0)*sin(q1)), - 0.148*cos(q0)*sin(q1) - 0.16*cos(q2 + 1.57)*(0.707*cos(q0)*sin(q1) + cos(q1)*(4.33e-17*sin(q0) + 0.707)) - 0.16*sin(q2 + 1.57)*(0.707*cos(q0)*cos(q1) - sin(q1)*(4.33e-17*sin(q0) + 0.707)) - 0.21*cos(q1)*(4.33e-17*sin(q0) + 0.707), - 0.16*cos(q2 + 1.57)*(0.707*cos(q0)*sin(q1) + cos(q1)*(4.33e-17*sin(q0) + 0.707)) - 0.16*sin(q2 + 1.57)*(0.707*cos(q0)*cos(q1) - sin(q1)*(4.33e-17*sin(q0) + 0.707))]
+[   9.09e-18*cos(q0)*sin(q1) + 0.148*cos(q1)*sin(q0) + 0.16*cos(q2 + 1.57)*(4.33e-17*cos(q0)*sin(q1) + 0.707*cos(q1)*sin(q0)) + 0.16*sin(q2 + 1.57)*(4.33e-17*cos(q0)*cos(q1) - 0.707*sin(q0)*sin(q1)),   0.148*cos(q0)*sin(q1) + 0.16*cos(q2 + 1.57)*(0.707*cos(q0)*sin(q1) + cos(q1)*(4.33e-17*sin(q0) - 0.707)) + 0.16*sin(q2 + 1.57)*(0.707*cos(q0)*cos(q1) - sin(q1)*(4.33e-17*sin(q0) - 0.707)) + 0.21*cos(q1)*(4.33e-17*sin(q0) - 0.707),   0.16*cos(q2 + 1.57)*(0.707*cos(q0)*sin(q1) + cos(q1)*(4.33e-17*sin(q0) - 0.707)) + 0.16*sin(q2 + 1.57)*(0.707*cos(q0)*cos(q1) - sin(q1)*(4.33e-17*sin(q0) - 0.707))]
+ 
+
+tau =
+
+   -0.6930
+   -0.0000
+   -0.0000
+
+</pre><img vspace="5" hspace="5" src="CIBR_Arm_Rotation_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Figuring Out Rotation Matrix for 3 Link Stroke Rehab Arm
+% Prepared and submitted by Alexandra Valiton
+% Spring 2018
+
+clear all; close all; clc;
+
+%% Questions 1 and 2: DH Parameters Table
+% See Figure 1 for axis labels at each joint. See Table 1 for the DH
+% Parameters, based on the axis labels in figure 1. 
+%
+%
+% <<Fig1.jpeg>>
+%
+%
+% <<Table1.jpeg>>
+%
+% In this section, each DH parameter will be declared as an [n x 1] vector,
+% where each element index corresponds to the joint index. Since some of
+% the DH parameters are static (e.g. link lengths) and others are variable 
+% (e.g. joint states), there is a vector of joint variables $q$ whose 
+% elements will be used in the Parameter Vectors
+
+syms q0 q1 q2 'real'; % Joint states, in degrees
+syms l0 l1 l2 l3 'real'; % Joint lengths, in cm
+
+q = [q0, q1, q2];
+l = [l0, l1, l2, l3];
+
+DH_theta = [0, deg2rad(90), q(1), q(2), q(3)+ deg2rad(90)]'; % Theta angles 
+DH_d = [l(1), 0, l(2), 0, 0]'; % Displacements d in mm
+DH_a = [0, 0, 0, l(3), l(4)]'; % Displacements a in mm
+DH_alpha = [deg2rad(-45), 0, deg2rad(-90), 0, 0]'; % rotations alpha
+
+%% Question 4: Calculate the Overall Transformation Matrix
+% The frame-by frame transformation matrices can be multiplied together to
+% create the transformation matrix $T_6^0$, representing the transformation
+% between the base frame $F_0$ and the tip frame $F_6$. The transformation
+% is first given purely symbolically, then with 0's inserted where they
+% occur in the model (see Table 1).
+
+T = eye(4); % start with an Identity matrix seed to multiply subsequent transformations by
+for i=1:length(DH_d)
+    T_local = dhparam2matrix(DH_theta(i), DH_d(i), DH_a(i), DH_alpha(i));
+    T = T * T_local;
+end
+disp("The total transformation can be represented by:");
+disp(vpa(T));
+
+%% Question 7: Plot Arm in 3D
+% Given the 6 joint angles, plot a stick figure of the robot.
+
+
+var1 = {l0, l1, l2, l3};
+var2 = {0.07, 0.15, 0.21, 0.16};
+DH_d = subs(DH_d, var1, var2);
+DH_a = subs(DH_a, var1, var2);
+T = subs(T, var1, var2);
+
+var1 = {q0, q1, q2};
+var2 = {0,0,0};%{0.44, -0.84, 1.64-pi/2};
+DH_theta = eval(subs(DH_theta, var1, var2));
+DH_alpha = eval(subs(DH_alpha, var1, var2));
+
+plotarm_3DOF(DH_theta, DH_d, DH_alpha, DH_a);
+
+FK = T(1:3,4);
+R = eval(subs(T(1:3,1:3), var1, var2));
+
+J = jacobian(FK, [q0,q1,q2]');
+J = vpa(J,3)
+
+J = eval(subs(J, var1, var2));
+F_tip = [3.3;0;0];
+tau = transpose(J)*(F_tip)
+
+
+
+##### SOURCE END #####
+--></body></html>

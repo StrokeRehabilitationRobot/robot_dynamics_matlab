@@ -9,17 +9,11 @@ Tu = 2.55
 Kp = 0.8*Ku
 Td = Tu/8
 
-K1 = Kp*eye(3);
-D1 = Kp*Td*eye(3);
+K1 = 7*Kp*eye(3);
+D1 = 5*Kp*Td*eye(3);
 
-Ku2 = 5000
-Tu2 = 0.9
-Kp2 = 0.8*Ku2
-Td2 = Tu2/8
-
-
-K2 = Kp2*eye(3);
-D2 = Kp2*Td2*eye(3);    
+K2 = 10000*eye(3);
+D2 = 0*eye(3);
 
 A = eye(6);
 
@@ -37,10 +31,10 @@ desired_state = [300, 300, 300, 0,0,0]';
 wall_loc = [200,200,200]';
 %wall_loc = [2,2,2]';
 
-wall_depth = .5*30;
+wall_depth = .25*30;
 
 % deadline = 0.5; % seconds
-tf = 5; %seconds
+tf = 50; %seconds
 trange = (0:dt:tf);
 
 force = zeros(length(trange), 3);
@@ -107,5 +101,3 @@ subplot(3,2,6);
 plot(trange, vel(:,:));  hold on;
 legend;
 title('Velocities');
-
-
