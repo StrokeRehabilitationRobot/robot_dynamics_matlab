@@ -26,21 +26,33 @@ var1 = {l0, l1, l2, l3};
 var2 = {0.07, 0.15, 0.21, 0.16};
 DH_d = subs(DH_d, var1, var2);
 DH_a = subs(DH_a, var1, var2);
-T = subs(T(:,:,end), var1, var2);
+for i=1:length(DH_a)
+    T_eval(:,:,i) = subs(T(:,:,i), var1, var2);
+end
 
-var1 = {q0, q1, q2};
-var2 = {0,0,0};%{0.44, -0.84, 1.64-pi/2};
-DH_theta = eval(subs(DH_theta, var1, var2));
-DH_alpha = eval(subs(DH_alpha, var1, var2));
 
-FK = T(1:3,4);
-R = eval(subs(T(1:3,1:3), var1, var2));
+for i=1:length(DH_a)
+    FK = T_eval(1:3,4,i);
+    J(:,:,i) = vpa(jacobian(FK, [q0,q1,q2]'),3);
+end
+ 
+mass = 1;
+J(:,:,end)
+m_matrix = mass*eye(3)
+g = [0;0;-9.81];
 
-J = jacobian(FK, [q0,q1,q2]');
-J = vpa(J,3)
+M = transpose(J(:,:,1))*m_matrix*J(:,:,1);
+G = transpose(J(:,:,1))*g;
+for i=2:length(J)
+    M = M + transpose(J(:,:,i))*m_matrix*J(:,:,i);
+    G = G + transpose(J(:,:,i))*g;
+end
+matlabFunction(M, "File", "getM")
+matlabFunction(G, "File", "getG")
+matlabFunction(J(:,:,end), "File", "getJ")
 
-J = eval(subs(J, var1, var2));
-F_tip = [3.3;0;0];
-tau = transpose(J)*(F_tip)
+
+
+
 
 
