@@ -50,6 +50,7 @@ end
 matlabFunction(M, "File", "getM")
 matlabFunction(G, "File", "getG")
 matlabFunction(J(:,:,end), "File", "getJ")
+matlabFunction(T(1:3,4,end), "File", "FK")
 
 
 
