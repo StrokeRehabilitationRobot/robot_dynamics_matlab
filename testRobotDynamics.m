@@ -36,9 +36,8 @@ for index=1:length(angles)
         plotz(i) = T(3,4,i);
     end
     
-    
   
-        x = [0 plotx];
+        x = [ 0 plotx];
         y = [ 0 ploty];
         z = [ 0 plotz];
         %plot([ 0 O1(i,1) O2(i,1)],[ 0 O1(i,2) O2(i,2)] )

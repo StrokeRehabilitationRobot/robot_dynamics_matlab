@@ -50,8 +50,7 @@ K = 0.5*dq'*M*dq
 syms q0 q1 q2 dq0 dq1 dq2
 q_fix = [q0,q1,q2];
 dq_fix = [dq0,dq1,dq2];
-V2 = subs(V,q,q_fix)
-G_fix = [diff(V2,q0);diff(V2,q1); diff(V2,q2)]
+G = diff(V,q) 
 % dL = functionalDerivative(K-V,q);
 % CG = subs(dL, [diff(q,t,2)] ,[0,0,0]);
 % G = subs(CG, [diff(q,t)], [0,0,0]);
@@ -63,5 +62,5 @@ G_fix = [diff(V2,q0);diff(V2,q1); diff(V2,q2)]
 % M_fix = subs(M_fix,[diff(q,t)],dq_fix) 
 
 %matlabFunction(M_fix, "File", "getM")
-% matlabFunction(G_fix, "File", "getG")
+%matlabFunction(G_fix, "File", "getG")
 %matlabFunction(C_fix, "File", "getC")
