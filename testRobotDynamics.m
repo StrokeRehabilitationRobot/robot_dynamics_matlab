@@ -3,7 +3,7 @@ clear all
 K_wall = 10;
 B_wall = 10;
 mass = 10;
-K = 10;
+K = 1000000;
 D = 10;
 dt = 0.01;
 sim('robot_dynamics')
