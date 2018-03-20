@@ -1,11 +1,16 @@
-clear all
+clear all;
+close all;
+clc;
 
 K_wall = 10;
 B_wall = 10;
-mass = 10;
-K = 1000000;
+mass = 1;
+K = 100;
+
+
 D = 10;
 dt = 0.01;
+set_param('robot_dynamics','AlgebraicLoopSolver','LineSearch')
 sim('robot_dynamics')
 
 hold on

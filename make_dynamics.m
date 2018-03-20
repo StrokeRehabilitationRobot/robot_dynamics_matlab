@@ -18,7 +18,7 @@ l = [0.07, 0.15, 0.21, 0.16];
 
 
 DH_theta = [ q(1), q(2), q(3)+ deg2rad(90)]'; % Theta angles 
-DH_d     = [l(1), 0, 0]'; % Displacements d in mm
+DH_d     = [l(2), 0, 0]'; % Displacements d in mm
 DH_a     = [0, l(3), l(4)]'; % Displacements a in mm
 DH_alpha = [deg2rad(-90), 0,  0]'; % rotations alpha
 
@@ -73,10 +73,12 @@ G = subs(CG, [diff(q,t)], [0,0,0]);
 C = subs(dL-G,[diff(q,t,2)] ,[0,0,0]);
 C_fix = subs(C, diff(q,t),dq_fix)
 C_fix = subs(C_fix, q,q_fix);
-G_fix = subs(G, [q],q_fix)
-M_fix = subs(M,[q],q_fix) 
-M_fix = subs(M_fix,[diff(q,t)],dq_fix) 
-
-matlabFunction(M_fix, "File", "getM")
-matlabFunction(G_fix, "File", "getG")
-matlabFunction(C_fix, "File", "getC")
+G_fix = subs(G, [q],q_fix);
+M_fix = subs(M,[q],q_fix) ;
+M_fix = subs(M_fix,[diff(q,t)],dq_fix); 
+FK = subs(T(1:3,4,end), [q],[q_fix]);
+J_fix = subs(J(:,:,end),[q],[q_fix]);
+%matlabFunction(M_fix, "File", "getM")
+%matlabFunction(G_fix, "File", "getG")
+%matlabFunction(C_fix, "File", "getC")
+matlabFunction(J_fix, "File", "getJ")
