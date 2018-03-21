@@ -16,13 +16,16 @@ l = [0.07, 0.15, 0.21, 0.16];
 % DH_a     = [0, 0, 0, l(3), l(4)]'; % Displacements a in mm
 % DH_alpha = [deg2rad(-45), 0, deg2rad(-90), 0, 0]'; % rotations alpha
 
+% DH_theta = [ q(1), q(2), q(3)+ deg2rad(90)]'; % Theta angles 
+% DH_d     = [l(2), 0, 0]'; % Displacements d in mm
+% DH_a     = [0, l(3), l(4)]'; % Displacements a in mm
+% DH_alpha = [deg2rad(-90), 0,  0]'; % rotations alpha
 
-DH_theta = [ q(1), q(2), q(3)+ deg2rad(90)]'; % Theta angles 
-DH_d     = [l(2), 0, 0]'; % Displacements d in mm
-DH_a     = [0, l(3), l(4)]'; % Displacements a in mm
-DH_alpha = [deg2rad(-90), 0,  0]'; % rotations alpha
-
-
+% AV Version March 21
+DH_theta = [0, deg2rad(90) + q(1), q(2), q(3), deg2rad(90)]'; % Theta angles 
+DH_d = [l(1), l(2), 0, 0, 0]'; % Displacements d in mm
+DH_a = [0, 0, l(3), l(4), 0]'; % Displacements a in mm
+DH_alpha = [deg2rad(-45), deg2rad(-90), 0, 0, deg2rad(90)]'; % rotations alpha
 
 %T = eye(4); % start with an Identity matrix seed to multiply subsequent transformations by
 T= dhparam2matrix(DH_theta(1), DH_d(1), DH_a(1), DH_alpha(1));
@@ -77,8 +80,9 @@ G_fix = subs(G, [q],q_fix);
 M_fix = subs(M,[q],q_fix) ;
 M_fix = subs(M_fix,[diff(q,t)],dq_fix); 
 FK = subs(T(1:3,4,end), [q],[q_fix]);
+matlabFunction(FK, "File", "FK")
 J_fix = subs(J(:,:,end),[q],[q_fix]);
-%matlabFunction(M_fix, "File", "getM")
-%matlabFunction(G_fix, "File", "getG")
-%matlabFunction(C_fix, "File", "getC")
+matlabFunction(M_fix, "File", "getM")
+matlabFunction(G_fix, "File", "getG")
+matlabFunction(C_fix, "File", "getC")
 matlabFunction(J_fix, "File", "getJ")

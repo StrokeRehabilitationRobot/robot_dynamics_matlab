@@ -30,13 +30,13 @@ A = eye(6);
 
 A(1:3,4:6) = dt*eye(3);
 B = zeros(6,3);
-D = 0*B;
-C = eye(6);
+% D = 0*B;
+% C = eye(6);
 
 
 B(4:6,1:3) = dt*eye(3);
 
-mass = 10;
+mass = 5;
 state = [0,0,0,0,0,0]';
 desired_state = [300, 300, 300, 0,0,0]';
 wall_loc = [200,200,200]';
@@ -60,8 +60,8 @@ for i = 1:length(trange)
     de = desired_state(4:6) - state(4:6);
     error(i,:) = e;
     ee_force = K1*e + D1*de;
-    wallForce = getForceWall(K2, D2, state(1:3), state(4:6), wall_depth, wall_loc);
-    force(i,:) = ee_force - wallForce;
+    %wallForce = getForceWall(K2, D2, state(1:3), state(4:6), wall_depth, wall_loc);
+    force(i,:) = ee_force% - wallForce;
     xdd = force(i,:)/mass;
     state = A*state + B*xdd';
     pos(i,:) = state(1:3)';

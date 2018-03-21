@@ -2,30 +2,39 @@ clear all;
 close all;
 clc;
 
+IC_q = [0; 0; 0];
 K_wall = 10;
-B_wall = 10;
+B_wall = 1;
 mass = 1;
-K = 100;
+K = 25;
+IC_pos = FK(IC_q(1), IC_q(2), IC_q(3));
 
-
-D = 10;
-dt = 0.01;
+D = 0;
+dt = 0.001;
 set_param('robot_dynamics','AlgebraicLoopSolver','LineSearch')
 sim('robot_dynamics')
 
-hold on
+
 l = [0.07, 0.15, 0.21, 0.16];
-DH_d = [l(1), 0, l(2), 0, 0]'; % Displacements d in mm
-DH_a = [0, 0, 0, l(3), l(4)]'; % Displacements a in mm
+% DH_d = [l(1), 0, l(2), 0, 0]'; % Displacements d in mm
+% DH_a = [0, 0, 0, l(3), l(4)]'; % Displacements a in mm
 figure 
-h = plot3([0],[ 0 ],[ 0])
-axis([-2 2 -2 2]);
+h = plot3([0],[ 0 ],[ 0]);
+axis([-1 1 -1 1 -1 1]); hold on; grid on;
 for index=1:length(angles)
 
-    DH_theta = [0, deg2rad(90), angles(index,1), angles(index,2), angles(index,3)+ deg2rad(90)]'; % Theta angles 
-    DH_d = [l(1), 0, l(2), 0, 0]'; % Displacements d in mm
-    DH_a = [0, 0, 0, l(3), l(4)]'; % Displacements a in mm
-    DH_alpha = [deg2rad(-45), 0, deg2rad(-90), 0, 0]'; % rotations alpha
+    %Alexandra's Re-calculated DH params, March 21
+    DH_theta = [0, deg2rad(90) + angles(index,1), angles(index,2), angles(index,3), deg2rad(90)]'; % Theta angles 
+    DH_d = [l(1), l(2), 0, 0, 0]'; % Displacements d in mm
+    DH_a = [0, 0, l(3), l(4), 0]'; % Displacements a in mm
+    DH_alpha = [deg2rad(-45), deg2rad(-90), 0, 0, deg2rad(90)]'; % rotations alpha
+    
+    
+    % Previous DH Params, March 20
+%     DH_theta = [0, deg2rad(90), angles(index,1), angles(index,2), angles(index,3)+ deg2rad(90)]'; % Theta angles 
+%     DH_d = [l(1), 0, l(2), 0, 0]'; % Displacements d in mm
+%     DH_a = [0, 0, 0, l(3), l(4)]'; % Displacements a in mm
+%     DH_alpha = [deg2rad(-45), 0, deg2rad(-90), 0, 0]'; % rotations alpha
 
     %T = eye(4); % start with an Identity matrix seed to multiply subsequent transformations by
     T= dhparam2matrix(DH_theta(1), DH_d(1), DH_a(1), DH_alpha(1));
