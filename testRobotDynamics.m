@@ -10,7 +10,7 @@ K = 100;
 
 D = 10;
 dt = 0.01;
-set_param('robot_dynamics','AlgebraicLoopSolver','LineSearch')
+set_param('robot_dynamics','AlgebraicLoopSolver','TrustRegion')
 sim('robot_dynamics')
 
 hold on
@@ -22,10 +22,16 @@ h = plot3([0],[ 0 ],[ 0])
 axis([-2 2 -2 2]);
 for index=1:length(angles)
 
-    DH_theta = [0, deg2rad(90), angles(index,1), angles(index,2), angles(index,3)+ deg2rad(90)]'; % Theta angles 
-    DH_d = [l(1), 0, l(2), 0, 0]'; % Displacements d in mm
-    DH_a = [0, 0, 0, l(3), l(4)]'; % Displacements a in mm
-    DH_alpha = [deg2rad(-45), 0, deg2rad(-90), 0, 0]'; % rotations alpha
+%     DH_theta = [0, deg2rad(90), angles(index,1), angles(index,2), angles(index,3)+ deg2rad(90)]'; % Theta angles 
+%     DH_d = [l(1), 0, l(2), 0, 0]'; % Displacements d in mm
+%     DH_a = [0, 0, 0, l(3), l(4)]'; % Displacements a in mm
+%     DH_alpha = [deg2rad(-45), 0, deg2rad(-90), 0, 0]'; % rotations alpha
+
+    DH_theta = [ angles(index,1), angles(index,2), angles(index,3) + deg2rad(90)]'; % Theta angles 
+    DH_d     = [l(2), 0, 0]'; % Displacements d in mm
+    DH_a     = [0, l(3), l(4)]'; % Displacements a in mm
+    DH_alpha = [deg2rad(-90), 0,  0]'; % rotations alpha
+
 
     %T = eye(4); % start with an Identity matrix seed to multiply subsequent transformations by
     T= dhparam2matrix(DH_theta(1), DH_d(1), DH_a(1), DH_alpha(1));

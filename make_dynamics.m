@@ -17,7 +17,7 @@ l = [0.07, 0.15, 0.21, 0.16];
 % DH_alpha = [deg2rad(-45), 0, deg2rad(-90), 0, 0]'; % rotations alpha
 
 
-DH_theta = [ q(1), q(2), q(3)+ deg2rad(90)]'; % Theta angles 
+DH_theta = [ q(1), q(2), q(3) + deg2rad(90)]'; % Theta angles 
 DH_d     = [l(2), 0, 0]'; % Displacements d in mm
 DH_a     = [0, l(3), l(4)]'; % Displacements a in mm
 DH_alpha = [deg2rad(-90), 0,  0]'; % rotations alpha
