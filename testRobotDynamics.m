@@ -3,15 +3,16 @@ close all;
 clc;
 
 IC_q = [0; 0; 0];
-K_wall = 10;
-B_wall = 0;
-wall_x = 50;
+IC_pos = FK(IC_q(1), IC_q(2), IC_q(3));
+wall_x = 100;
 wall_y = 10;
+
+K_wall = 100;
+B_wall = 0;
+
 mass = 1;
 K = 50;
-IC_pos = FK(IC_q(1), IC_q(2), IC_q(3));
-
-D = 50;
+D = 500;
 dt = 0.001;
 set_param('robot_dynamics','AlgebraicLoopSolver','LineSearch')
 sim('robot_dynamics')
