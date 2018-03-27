@@ -7,9 +7,9 @@ IC_pos = FK(IC_q(1), IC_q(2), IC_q(3));
 wall_x = 100;
 wall_y = 10;
 
-K_wall = 500;
-B_wall = 0;
-
+K_wall = 400;
+B_wall = 10;
+ 
 mass = 1;
 K = 500;
 D = 500;
